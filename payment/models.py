@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import Usuario
 
+
 class Service(models.Model):
     name = models.CharField('Nombre de Servicio', max_length=255)
     description = models.TextField('Descripcion del Servicio')
