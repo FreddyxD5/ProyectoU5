@@ -6,17 +6,27 @@ from users.models import Usuario
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = '__all__'
+        fields = []
         read_only_fields = 'created_at',
+
+    def to_representation(self, instance):
+        return {
+            "id":instance.id,
+            "email": instance.email,
+            "nombres":instance.nombres if instance.nombres is not None else '',
+            "apellidos":instance.apellidos if instance.apellidos is not None else '',
+            "telefono":instance.telefono if instance.telefono is not None else '',
+            "direccion":instance.direccion if instance.direccion is not None else ''            
+        }
     
 class SignUpSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(max_length=80)
-    username = serializers.CharField(max_length=80)    
-    password = serializers.CharField(min_length=8, write_only=True)
+    email = serializers.CharField(max_length=80)      
+    password1 = serializers.CharField(min_length=8, write_only=True)
+    password2 = serializers.CharField(min_length=8, write_only=True)
 
     class Meta:
         model = Usuario
-        fields = ['email','username','password']
+        fields = ['email','password1', 'password2']
 
     
     def validate(self, attrs):
@@ -26,11 +36,13 @@ class SignUpSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def create(self, validated_data):
-        password = validated_data.pop('password')
+        password1 = validated_data.pop('password1')
+        password2 = validated_data.pop('password2')
         user = super().create(validated_data)
-        user.set_password(password)
-        user.save()
-        Token.objects.create(user=user)
+        if password1 != password2:
+            raise ValidationError("Las contraseñas deben ser iguales")
+        user.set_password(password1)
+        user.save()        
         return user
 
 

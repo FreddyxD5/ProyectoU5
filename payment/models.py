@@ -18,7 +18,17 @@ class PaymentUser(models.Model):
     payment_date = models.DateField(blank=True)
     expiration_date = models.DateField(blank=True)
 
+    def obtener_email_user(self):
+        return self.user.email
+
+    def __str__(self):
+        return f"Recibo de {self.obtener_email_user()} por: {self.service.name}"
+
 
 class ExpiredPayment(models.Model):
     payment_user = models.ForeignKey(PaymentUser, on_delete=models.CASCADE)
     penalty_free_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    
+    def __str__(self):
+        return f"Recibo Expirado de {self.payment_user.obtener_email_user()} por S./{self.penalty_free_amount}"
+    

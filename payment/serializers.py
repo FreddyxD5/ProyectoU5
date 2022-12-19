@@ -8,10 +8,20 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 class PaymentUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Service
+        model = PaymentUser
         fields = '__all__'
+
+    def to_representation(self, instance):
+        return {
+            "id":instance.id,
+            "user":instance.user.email,
+            "service":instance.service.name,
+            "amount":instance.amount,
+            "payment_date":instance.payment_date,
+            "expiration_date":instance.expiration_date
+        }
 
 class ExpiredPaymentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Service
+        model = ExpiredPayment
         fields = '__all__'
