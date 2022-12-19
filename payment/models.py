@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import Usuario
 
 class Service(models.Model):
     name = models.CharField('Nombre de Servicio', max_length=255)
@@ -10,6 +11,7 @@ class Service(models.Model):
 
 
 class PaymentUser(models.Model):
+    user= models.ForeignKey(Usuario, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default = 0.0)
     payment_date = models.DateField(blank=True)
