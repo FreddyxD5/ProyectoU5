@@ -28,6 +28,23 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+CORS_ALLOWED_ORIGINS = [
+    "https://example.com",
+    "https://sub.example.com",
+    "http://localhost:8080",
+    "http://127.0.0.1:9000",
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+]
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,15 +54,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'rest_framework_simplejwt',
     'rest_framework',
+    'corsheaders',
+    'django_filters',
     'users.apps.UsersConfig',
-    'payment',
+    'payment.apps.PaymentConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -89,16 +110,28 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE':100,
-
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ],
+    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend'],    
     'DEFAULT_AUTHENTICATION_CLASSES': (       
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {     
+        'payments':'3/day',
+        'services':'7/day',
+        'expired':'7/day'
+        
+    },
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -151,6 +184,19 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
+
+
+#Swagger Settings
+SWAGGER_SETTINGS = {    
+    'VALIDATOR_URL': 'http://localhost:8189',
+    'SECURITY_DEFINITIONS':{
+        "Autorización por Token inserte [Token (JWT) ]":{
+            "type":"apiKey",
+            "name":"Authorization",
+            "in":"header"
+        }
+    }
+}
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
