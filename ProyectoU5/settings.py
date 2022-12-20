@@ -26,18 +26,12 @@ SECRET_KEY = 'django-insecure-wy*1tm#@x2aaw$2x76&i-h=w-(brvoo_w=fgr3lzdm62l6j4hz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
-
-CORS_ALLOWED_ORIGINS = [
-    "https://example.com",
-    "https://sub.example.com",
-    "http://localhost:8080",
-    "http://127.0.0.1:9000",
-    "http://127.0.0.1:5500",
-    "http://localhost:5500",
-    'https://web-production-3b88.up.railway.app',
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'web-production-3b88.up.railway.app',
 ]
+
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -49,23 +43,31 @@ CORS_ALLOW_METHODS = [
 ]
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'whitenoise.runserver_nostatic',
-    'drf_yasg',
-    'rest_framework_simplejwt',
-    'rest_framework',
-    'corsheaders',
-    'django_filters',
-    'django_celery_beat',
+
+]
+
+PROJECT_APPS = [
     'users.apps.UsersConfig',
     'payment.apps.PaymentConfig',
 ]
+THIRD_PARTY_APPS = [
+    'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'whitenoise.runserver_nostatic',
+    'drf_yasg',
+    'django_filters',
+    'django_celery_beat',
+]
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -113,6 +115,21 @@ DATABASES = {
         'PORT':5863,
     }
 }
+
+
+CORS_ALLOWED_ORIGINS = [    
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",   
+    'https://web-production-3b88.up.railway.app',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://web-production-3b88.up.railway.app/'
+    ]
+
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -222,7 +239,7 @@ TIME_ZONE = 'America/Lima'
 USE_I18N = True
 
 USE_TZ = True
-CSRF_TRUSTED_ORIGINS = ['https://web-production-3b88.up.railway.app/']
+
 
 
 # Static files (CSS, JavaScript, Images)
