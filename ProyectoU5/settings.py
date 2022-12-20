@@ -36,7 +36,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
     "http://127.0.0.1:5500",
     "http://localhost:5500",
-    'https://web-production-3b88.up.railway.app/'
+    'https://web-production-3b88.up.railway.app',
 ]
 
 CORS_ALLOW_METHODS = [
