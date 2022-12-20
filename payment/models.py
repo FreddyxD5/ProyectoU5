@@ -27,7 +27,7 @@ class PaymentUser(models.Model):
     @property
     def fecha_limite(self):
         if self.expiration_date is not None:
-            if datetime.now() > expiration_date:
+            if datetime.now() > self.expiration_date:
                 self.deuda_vigente = False
                 self.save()
                 return True
