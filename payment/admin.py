@@ -6,3 +6,5 @@ from payment.models import Service, PaymentUser, ExpiredPayment
 admin.site.register(Service)
 admin.site.register(PaymentUser)
 admin.site.register(ExpiredPayment)
+
+class PaymentUser
