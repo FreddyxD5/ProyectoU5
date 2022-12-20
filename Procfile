@@ -1,1 +1,1 @@
-web: python manage.py makemigrations && manage.py migrate && gunicorn ProyectoU4.wsgi
+web: python manage.py makemigrations && manage.py migrate && gunicorn ProyectoU5.wsgi
