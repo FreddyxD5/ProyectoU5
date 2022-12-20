@@ -19,7 +19,7 @@ funcionalidades que el login desarrollado en sesiones anteriores. (Terminado)
 
 7.-Añadir filtro de búsqueda en Payment_user para los campos de fecha de pago y fecha de expiración.(Pendiente)
 
-8.-Si la fecha de pago supera a la fecha de expiración, se debe crear un registro automático en Expired_payments.(Pendiente)
+8.-Si la fecha de pago supera a la fecha de expiración, se debe crear un registro automático en Expired_payments.(Terminado)
 
 9.-Implementar Throttling para la vista de pagos con 1000 request por día y
 las demás de 2000 por día. Para las pruebas realizar con 3 y 7 respectivamente. (Terminado)

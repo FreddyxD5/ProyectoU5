@@ -40,10 +40,7 @@ class SignUpView(generics.GenericAPIView):
 
     def post(self, request:Request):
         print(request.data)
-        data = request.data
-        # if request.data['password'] != request.data['password2']:
-        #     return Response({"error":"las contraseñas deben ser iguales"}, status = status.HTTP_400_BAD_REQUEST)
-        
+        data = request.data        
         serializer = self.serializer_class(data = data)
         
         if serializer.is_valid():

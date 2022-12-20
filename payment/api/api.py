@@ -13,7 +13,7 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all().order_by('id')
     serializer_class = ServiceSerializer
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.DjangoFilterBackend]
+    filter_backends = (filters.DjangoFilterBackend, )
     search_fields = ['name']
     filterset_fields = ('name',)
     permission_classes = [CustomPermission]
@@ -31,8 +31,9 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
     permission_classes=[CustomPaymentUserPermission] 
     pagination_class = StandardResultsSetPagination
 
-    filter_backends = [filters.DjangoFilterBackend]    
-    # filterset_fields = ('user','payment_date', 'expiration_date',)
+    filter_backends = (filters.DjangoFilterBackend, )
+    search_fields = ['user']
+    filterset_fields = ('user','payment_date', 'expiration_date',)
 
     throttle_scope = 'payments'
 
@@ -50,8 +51,8 @@ class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     queryset = ExpiredPayment.objects.all().order_by('id')
     permission_classes=[CustomPermission] 
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.DjangoFilterBackend]    
-    # filterset_fields = ('user','payment_date', 'service',)
+    filter_backends = (filters.DjangoFilterBackend, )   
+    filterset_fields = ('payment_user',)
     throttle_scope = 'expired'
 
 

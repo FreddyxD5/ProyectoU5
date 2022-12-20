@@ -18,6 +18,8 @@ class PaymentUser(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default = 0.0)
     payment_date = models.DateField(blank=True)
     expiration_date = models.DateField(blank=True)
+    deuda_vigente = models.BooleanField(default=True)
+
 
     def obtener_email_user(self):
         return self.user.email
@@ -26,6 +28,8 @@ class PaymentUser(models.Model):
     def fecha_limite(self):
         if self.expiration_date is not None:
             if datetime.now() > expiration_date:
+                self.deuda_vigente = False
+                self.save()
                 return True
             return False
         return False
