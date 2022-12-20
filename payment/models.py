@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from users.models import Usuario
 
@@ -5,7 +6,7 @@ from users.models import Usuario
 class Service(models.Model):
     name = models.CharField('Nombre de Servicio', max_length=255)
     description = models.TextField('Descripcion del Servicio')
-    logo = models.URLField(("URL de logo"), max_length=200)
+    logo = models.URLField(("URL de logo"), max_length=200, null=True, blank=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -20,6 +21,15 @@ class PaymentUser(models.Model):
 
     def obtener_email_user(self):
         return self.user.email
+
+    @property
+    def fecha_limite(self):
+        if self.expiration_date is not None:
+            if datetime.now() > expiration_date:
+                return True
+            return False
+        return False
+
 
     def __str__(self):
         return f"Recibo de {self.obtener_email_user()} por: {self.service.name}"

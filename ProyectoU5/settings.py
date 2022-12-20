@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'django_celery_beat',
     'users.apps.UsersConfig',
     'payment.apps.PaymentConfig',
 ]
@@ -119,7 +120,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_THROTTLE_RATES': {     
         'payments':'3/day',
-        'services':'7/day',
+        'services':'1000/day',
         'expired':'7/day'
         
     },
@@ -200,9 +201,16 @@ SWAGGER_SETTINGS = {
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+#CELERY CONFIGURATION
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_TIMEZONE = "America/Lima"
+
+
+LANGUAGE_CODE = 'es'
+
+TIME_ZONE = 'America/Lima'
 
 USE_I18N = True
 
