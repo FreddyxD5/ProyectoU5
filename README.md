@@ -17,5 +17,10 @@
 
 # Para mas información sobre la api (Documentacion)
   - puede ingresar a la ruta localhost:8000/swagger/ donde se mostraran todas las rutas y los metodos permitidos,
-  - 
-  - ![Imagen swagger](https://raw.githubusercontent.com/FreddyxD5/WaterPy/ProyectoU5/static/assets/ImagenV1.png)
+  - ![Imagen swagger](https://github.com/FreddyxD5/ProyectoU5/blob/main/static/assets/imagenV1.png)
+  - Loguearse
+  - ![Imagen swagger](https://github.com/FreddyxD5/ProyectoU5/blob/main/static/assets/imagenV2.png)
+  - Obtener el Token
+  - ![Imagen swagger](https://github.com/FreddyxD5/ProyectoU5/blob/main/static/assets/imagenV3.png)
+  - Validar el token dentro de la API y ya podemos usar las diferentes rutas dependiento de los permisos que tenga el usuario
+  - ![Imagen swagger](https://github.com/FreddyxD5/ProyectoU5/blob/main/static/assets/imagenV4.png)
