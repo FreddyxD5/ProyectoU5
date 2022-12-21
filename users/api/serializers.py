@@ -47,8 +47,8 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=80)
+    email = serializers.CharField(max_length=80)
     password = serializers.CharField(min_length=8, write_only=True)
     class Meta:
         model = Usuario
-        fields = ['username','password']
+        fields = ['email','password']
