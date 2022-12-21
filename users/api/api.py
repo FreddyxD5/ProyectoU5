@@ -53,9 +53,7 @@ class SignUpView(generics.GenericAPIView):
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
-    def post(self, request:Request):
-        print('oh?')
-        print(request.data)
+    def post(self, request:Request):       
         email = request.data.get('email')
         password = request.data.get('password')
 
