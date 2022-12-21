@@ -29,7 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    'web-production-3b88.up.railway.app',
+    'proyectou5-production.up.railway.app',
+    
 ]
 
 
@@ -120,13 +121,13 @@ DATABASES = {
 CORS_ALLOWED_ORIGINS = [    
     "http://localhost:8000",
     "http://127.0.0.1:8000",   
-    'https://web-production-3b88.up.railway.app',
+    'https://proyectou5-production.up.railway.app',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    'https://web-production-3b88.up.railway.app/'
+    'https://proyectou5-production.up.railway.app'
     ]
 
 
