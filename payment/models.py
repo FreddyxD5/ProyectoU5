@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from django.db import models
 from users.models import Usuario
@@ -41,7 +42,7 @@ class PaymentUser(models.Model):
 
 class ExpiredPayment(models.Model):
     payment_user = models.ForeignKey(PaymentUser, on_delete=models.CASCADE)
-    penalty_free_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    penalty_free_amount = models.DecimalField(max_digits=10, decimal_places=2, default=round(random.random()*100,2))
     
     def __str__(self):
         return f"Recibo Expirado de {self.payment_user.obtener_email_user()} por S./{self.penalty_free_amount}"

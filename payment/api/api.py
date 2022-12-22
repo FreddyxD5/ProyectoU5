@@ -1,6 +1,7 @@
+import random
 from rest_framework import viewsets, status
 from django_filters import rest_framework as filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from payment.pagination import StandardResultsSetPagination
@@ -8,15 +9,19 @@ from payment.api.serializers import ServiceSerializer, PaymentUserSerializer, Ex
 from payment.models import Service, PaymentUser, ExpiredPayment
 from payment.permissions import CustomPermission, CustomPaymentUserPermission
 
+from payment.filters import PaymentUserFilter
 
 class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all().order_by('id')
     serializer_class = ServiceSerializer
+    permission_classes = [AllowAny]
+
     pagination_class = StandardResultsSetPagination
-    filter_backends = (filters.DjangoFilterBackend, )
-    search_fields = ['name']
-    filterset_fields = ('name',)
-    permission_classes = [CustomPermission]
+    filter_backends = (filters.DjangoFilterBackend, )    
+    filterset_fields = {
+        'name':['contains']
+    }
+    
 
     search_fields = ['name']
     ordering = ('-id')
@@ -26,25 +31,35 @@ class ServiceViewSet(viewsets.ModelViewSet):
 
 
 class PaymentUserViewSet(viewsets.ModelViewSet):
-    serializer_class = PaymentUserSerializer
     queryset = PaymentUser.objects.all().order_by('id')
-    permission_classes=[CustomPaymentUserPermission] 
+    serializer_class = PaymentUserSerializer    
+    permission_classes=[AllowAny]
+
     pagination_class = StandardResultsSetPagination
-
-    filter_backends = (filters.DjangoFilterBackend, )
-    search_fields = ['payment_date']
-    filterset_fields = ['payment_date', 'expiration_date']
-
+    filter_backends = (filters.DjangoFilterBackend, )    
+    filterset_class = PaymentUserFilter
     throttle_scope = 'payments'
 
     class Meta:
         ordering = ['-id']
 
-    def list(self, request):        
-        if self.queryset:
-            serializer = self.get_serializer(self.get_queryset(), many=True)        
-            return Response(serializer.data,status = status.HTTP_200_OK)
-        return Response({"message":"Aun no hay datos que mostrar"}, status=status.HTTP_204_NO_CONTENT)
+    def create(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            payment_user = PaymentUser(
+                    user = serializer.validated_data['user'],
+                    service= serializer.validated_data['service'],
+                    amount= serializer.validated_data['amount'],
+                    payment_date= serializer.validated_data['payment_date'],
+                    expiration_date= serializer.validated_data['expiration_date'],
+                    )
+            payment_user.save()
+            #Creacion de Registro ExpiredPayment
+            if serializer.validated_data['payment_date'] > serializer.validated_data['expiration_date']:                                            
+                ExpiredPayment.objects.create(payment_user=payment_user)
+                return Response({'message':"Registro creado satisfactoriamente."}, status = status.HTTP_201_CREATED)                
+        return Response({'error':"Por favor asegurese de que los datos sean correctos."}, status = status.HTTP_400_BAD_REQUEST)    
+   
 
 class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     serializer_class = ExpiredPaymentSerializer
@@ -67,11 +82,4 @@ class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     #         serializer = self.get_serializer(self.get_queryset(), many=True)
     #         return Response(serializer.data, status = status.HTTP_200_OK)
     #     return Response({"message":"Aun no hay datos que mostrar"}, status=status.HTTP_204_NO_CONTENT)    
-
-    # def create(self, request):
-    #     return Response({"Payment Expired":"Creado correctamente"}, status=status.HTTP_201_CREATED)
-        
-
-    # def retrieve(self, request, pk=None):
-    #     return Response({"datos":"Datos del registro"}, status=status.HTTP_200_OK)
 
