@@ -3,7 +3,7 @@ from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_MET
 class CustomPermission(BasePermission):
     def has_permission(self, request, view):    
         if request.user.is_superuser:            
-            return True       
+            return True 
         elif request.user.is_active:
             if request.method in ['GET']:
                 return True
@@ -23,4 +23,4 @@ class CustomPaymentUserPermission(BasePermission):
                 return True
             return False
         return False
-# class Role(models.Model):
+

@@ -32,8 +32,8 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (filters.DjangoFilterBackend, )
-    search_fields = ['user']
-    filterset_fields = ('user','payment_date', 'expiration_date',)
+    search_fields = ['payment_date']
+    filterset_fields = ['payment_date', 'expiration_date']
 
     throttle_scope = 'payments'
 
@@ -49,7 +49,7 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
 class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     serializer_class = ExpiredPaymentSerializer
     queryset = ExpiredPayment.objects.all().order_by('id')
-    permission_classes=[CustomPermission] 
+    permission_classes=[CustomPermission]
     pagination_class = StandardResultsSetPagination
     filter_backends = (filters.DjangoFilterBackend, )   
     filterset_fields = ('payment_user',)
@@ -68,10 +68,10 @@ class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     #         return Response(serializer.data, status = status.HTTP_200_OK)
     #     return Response({"message":"Aun no hay datos que mostrar"}, status=status.HTTP_204_NO_CONTENT)    
 
-    def create(self, request):
-        return Response({"Payment Expired":"Creado correctamente"}, status=status.HTTP_201_CREATED)
+    # def create(self, request):
+    #     return Response({"Payment Expired":"Creado correctamente"}, status=status.HTTP_201_CREATED)
         
 
-    def retrieve(self, request, pk=None):
-        return Response({"datos":"Datos del registro"}, status=status.HTTP_200_OK)
+    # def retrieve(self, request, pk=None):
+    #     return Response({"datos":"Datos del registro"}, status=status.HTTP_200_OK)
 

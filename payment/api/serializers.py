@@ -4,7 +4,7 @@ from payment.models import Service,PaymentUser,ExpiredPayment
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = ["name", "description", "logo"]  
+        fields = ["id","name", "description", "logo"]  
 
 class PaymentUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +25,11 @@ class ExpiredPaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpiredPayment
         fields = '__all__'
+
+    def to_representation(self, instance):
+        return {
+            "id":instance.id,
+            "user":instance.payment_user.user.email,
+            "service":instance.payment_user.service.name,
+            "penalty_free_amount":instance.penalty_free_amount
+        }

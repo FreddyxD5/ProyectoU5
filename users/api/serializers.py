@@ -6,7 +6,7 @@ from users.models import Usuario
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = []
+        fields =['email', 'nombres', 'apellidos', 'telefono' ,'direccion']
         read_only_fields = 'created_at',
 
     def to_representation(self, instance):

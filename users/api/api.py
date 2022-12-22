@@ -24,8 +24,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def create(self, request):        
         return Response({"error":"No disponible"}, status = status.HTTP_204_NO_CONTENT)
 
-    def update(self, request, pk=None):
-        return Response({"error":"Actualizado"}, status = status.HTTP_201_CREATED)
+    # def update(self, request, pk=None):
+    #     return Response({"error":"Actualizado"}, status = status.HTTP_201_CREATED)
 
     def destroy(self, request, pk=None):
         usuario = Usuario.objects.get(id=pk) 

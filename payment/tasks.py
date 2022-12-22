@@ -5,7 +5,6 @@ from payment.models import PaymentUser
 from django.conf import settings
 
 
-
 @shared_task
 def create_payment_expired():    
     payment_list = PaymentUser.objects.all()
