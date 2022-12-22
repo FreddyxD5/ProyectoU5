@@ -107,23 +107,23 @@ WSGI_APPLICATION = 'ProyectoU5.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
-#     'default': { 
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'railway',
-#         'USER':'root',
-#         'PASSWORD':'D8xVbogfuyu8L9xwpGG1',
-#         'HOST':'containers-us-west-125.railway.app',
-#         'PORT':5863,
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': { 
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'railway',
+        'USER':'root',
+        'PASSWORD':'D8xVbogfuyu8L9xwpGG1',
+        'HOST':'containers-us-west-125.railway.app',
+        'PORT':5863,
+    }
+}
 
 
 CORS_ALLOWED_ORIGINS = [    

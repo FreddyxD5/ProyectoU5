@@ -14,7 +14,7 @@ from payment.filters import PaymentUserFilter
 class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all().order_by('id')
     serializer_class = ServiceSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [CustomPermission]
 
     pagination_class = StandardResultsSetPagination
     filter_backends = (filters.DjangoFilterBackend, )    
@@ -33,7 +33,7 @@ class ServiceViewSet(viewsets.ModelViewSet):
 class PaymentUserViewSet(viewsets.ModelViewSet):
     queryset = PaymentUser.objects.all().order_by('id')
     serializer_class = PaymentUserSerializer    
-    permission_classes=[AllowAny]
+    permission_classes=[CustomPaymentUserPermission]
 
     pagination_class = StandardResultsSetPagination
     filter_backends = (filters.DjangoFilterBackend, )    
