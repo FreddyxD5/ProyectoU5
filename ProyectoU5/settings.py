@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
+    '127.0.0.1:5500',
+    '127.0.0.1:5501',
     '0.0.0.0:6174',
     'localhost',
     'proyectou5-production.up.railway.app',
@@ -63,6 +65,7 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'whitenoise.runserver_nostatic',
     'drf_yasg',
     'django_filters',
@@ -105,30 +108,33 @@ WSGI_APPLICATION = 'ProyectoU5.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+#https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': { 
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'railway',
-        'USER':'root',
-        'PASSWORD':'D8xVbogfuyu8L9xwpGG1',
-        'HOST':'containers-us-west-125.railway.app',
-        'PORT':5863,
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': { 
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'railway',
+#         'USER':'root',
+#         'PASSWORD':'D8xVbogfuyu8L9xwpGG1',
+#         'HOST':'containers-us-west-125.railway.app',
+#         'PORT':5863,
+#     }
+# }
 
 
 CORS_ALLOWED_ORIGINS = [    
     "http://localhost:8000",
-    "http://127.0.0.1:8000",   
+    "http://127.0.0.1:8000", 
+    'http://localhost:5500',  
+    "http://127.0.0.1:5500",
+    "http://127.0.0.1:5501",
     'https://proyectou5-production.up.railway.app',
     "http://0.0.0.0:6174",
 ]
@@ -136,6 +142,9 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://127.0.0.1:5500',
     "http://0.0.0.0:6174",
     'https://proyectou5-production.up.railway.app'
     ]
@@ -156,9 +165,9 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.ScopedRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {     
-        'payments':'100/day',
-        'services':'1000/day',
-        'expired':'100/day'
+        'payments':'10000/day',
+        'services':'10000/day',
+        'expired':'10000/day'
         
     },
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -193,8 +202,8 @@ from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',

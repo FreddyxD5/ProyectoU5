@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework import generics, status
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 
 from users.tokens import create_jwt_pair_for_user
@@ -16,8 +19,18 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.filter(is_active=True)
     serializer_class = UsuarioSerializer
 
-    def list(self, request):
+    @action(methods=['POST'], detail=False, url_path='')
+    def get_user_data_from_access(self, request):        
+        access_token = request.data['access']
+        access_token_obj = AccessToken(access_token)     
+        user_id = access_token_obj['user_id']
+        user = Usuario.objects.get(id=user_id)
+        if user:
+            context = {'is_superuser':user.is_staff}
+            return Response(context, status= status.HTTP_200_OK)
+        return Response({'error':'No se pudo verificar el token'}, status=status.HTTP_400_BAD_REQUEST)             
 
+    def list(self, request):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
@@ -61,10 +74,22 @@ class LoginView(generics.GenericAPIView):
         if user is not None:
             tokens = create_jwt_pair_for_user(user)
 
-            response ={"message":"Logueado Correctamente", "email":email, "tokens":tokens}
+            response ={"message":"Logueado Correctamente", "email":email, "tokens":tokens, "is_superuser":user.is_staff}
             return Response(data = response, status = status.HTTP_200_OK)
         return Response(data={"message":"Invalid email or incorrect password"})
     
     def get(self, request:Request):
         content = {"user":str(request.user), "auth":str(request.auth)}
         return Response(data=content, status = status.HTTP_200_OK)
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):          
+        try:                  
+            refresh_token = request.data['refresh']            
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status = status.HTTP_205_RESET_CONTENT)
+        except Exception as e: 
+            return Response(status = status.HTTP_400_BAD_REQUEST)

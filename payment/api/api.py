@@ -1,5 +1,6 @@
 import random
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from django_filters import rest_framework as filters
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -43,7 +44,21 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
     class Meta:
         ordering = ['-id']
 
+    @action(methods=['get'], detail=False, url_path='pagos', permission_classes=[IsAuthenticated])
+    def obtener_pagos(self, request, pk=None):        
+        # print(request.user.is_staff)
+        if request.user.is_staff:
+            queryset = PaymentUser.objects.order_by('id') 
+        else:            
+            queryset = PaymentUser.objects.filter(user=request.user.id)
+            
+        if queryset:
+            datos_serializados = self.get_serializer(queryset, many=True)
+            return Response(datos_serializados.data, status=status.HTTP_200_OK)
+        return Response({'error':datos_serializados.errors}, status=status.HTTP_400_BAD_REQUEST)
+
     def create(self, request):
+        request.data['user'] = request.user.id
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
             payment_user = PaymentUser(
@@ -58,7 +73,8 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
             if serializer.validated_data['payment_date'] > serializer.validated_data['expiration_date']:                                            
                 ExpiredPayment.objects.create(payment_user=payment_user)
                 return Response({'message':"Registro creado satisfactoriamente."}, status = status.HTTP_201_CREATED)                
-        return Response({'error':"Por favor asegurese de que los datos sean correctos."}, status = status.HTTP_400_BAD_REQUEST)    
+            return Response({'message':"Registro creado satisfactoriamente."}, status = status.HTTP_201_CREATED)                
+        return Response({'error':serializer.errors}, status = status.HTTP_400_BAD_REQUEST)    
    
 
 class ExpiredPaymentViewSet(viewsets.ModelViewSet):
@@ -74,6 +90,19 @@ class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     class Meta:
         ordering = ['-id']
 
+    @action(methods=['get'], detail=False, url_path='recibos_vencidos', permission_classes=[IsAuthenticated])
+    def obtener_recibos_vencidos(self, request, pk=None):        
+        # print(request.user.is_staff)
+        if request.user.is_staff:
+            queryset = ExpiredPayment.objects.order_by('id') 
+        else:            
+            queryset = ExpiredPayment.objects.filter(user=request.user.id).order_by('id')
+            
+        if queryset:
+            datos_serializados = self.get_serializer(queryset, many=True)
+            return Response(datos_serializados.data, status=status.HTTP_200_OK)
+        return Response({'error':datos_serializados.errors}, status=status.HTTP_400_BAD_REQUEST)
+
     def list(self, request):
         return Response({"error":"Metodo no permitido, debe especificar un ID expired_payment/{id}"}, status=status.HTTP_204_NO_CONTENT)
 
@@ -82,4 +111,5 @@ class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     #         serializer = self.get_serializer(self.get_queryset(), many=True)
     #         return Response(serializer.data, status = status.HTTP_200_OK)
     #     return Response({"message":"Aun no hay datos que mostrar"}, status=status.HTTP_204_NO_CONTENT)    
+
 

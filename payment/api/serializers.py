@@ -16,8 +16,10 @@ class PaymentUserSerializer(serializers.ModelSerializer):
             "id":instance.id,
             "user":instance.user.email,
             "service":instance.service.name,
+            "logo":instance.service.logo if instance.service.logo is not None else '',
             "amount":instance.amount,
             "payment_date":instance.payment_date,
+            "deuda_vigente":instance.deuda_vigente,
             "expiration_date":instance.expiration_date
         }
 
@@ -40,6 +42,10 @@ class ExpiredPaymentSerializer(serializers.ModelSerializer):
         return {
             "id":instance.id,
             "user":instance.payment_user.user.email,
+            "monto":instance.payment_user.amount,
+            "logo":instance.payment_user.service.logo,
             "service":instance.payment_user.service.name,
+            "deuda_vigente":instance.payment_user.deuda_vigente,
+            "expiration_date":instance.payment_user.expiration_date,
             "penalty_free_amount":instance.penalty_free_amount
         }

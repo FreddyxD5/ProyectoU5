@@ -15,4 +15,4 @@ def create_payment_expired():
     
     for user_debt in user_with_debts:
         ExpiredPayment.objects.create(payment_user= user_debt, penalty_free_amount=round(random()*100,2))
-    return "Creacion de usuarios morosos con exito."
+    return "Creacion de usuarios morosos realizada con exito."
