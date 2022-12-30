@@ -45,8 +45,7 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
         ordering = ['-id']
 
     @action(methods=['get'], detail=False, url_path='pagos', permission_classes=[IsAuthenticated])
-    def obtener_pagos(self, request, pk=None):        
-        # print(request.user.is_staff)
+    def obtener_pagos(self, request, pk=None):   
         if request.user.is_staff:
             queryset = PaymentUser.objects.order_by('id') 
         else:            
@@ -91,12 +90,11 @@ class ExpiredPaymentViewSet(viewsets.ModelViewSet):
         ordering = ['-id']
 
     @action(methods=['get'], detail=False, url_path='recibos_vencidos', permission_classes=[IsAuthenticated])
-    def obtener_recibos_vencidos(self, request, pk=None):        
-        # print(request.user.is_staff)
+    def obtener_recibos_vencidos(self, request, pk=None):                
         if request.user.is_staff:
             queryset = ExpiredPayment.objects.order_by('id') 
         else:            
-            queryset = ExpiredPayment.objects.filter(user=request.user.id).order_by('id')
+            queryset = ExpiredPayment.objects.filter(payment_user__user=request.user.id).order_by('id')
             
         if queryset:
             datos_serializados = self.get_serializer(queryset, many=True)
