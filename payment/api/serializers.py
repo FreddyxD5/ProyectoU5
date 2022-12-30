@@ -22,11 +22,7 @@ class PaymentUserSerializer(serializers.ModelSerializer):
             "deuda_vigente":instance.deuda_vigente,
             "expiration_date":instance.expiration_date
         }
-
-    # def validate(self,data):
-    #     if data['payment_date'] > data['expiration_date']:
-    #         raise serializers.ValidationError('La fecha de vencimiento no puede ser antes que la fecha de pago')
-    #     return data
+    
 
     # def save(self,data):
     #     if self.validated_data['payment_date'] > self.validated_data['expiration_date']:
