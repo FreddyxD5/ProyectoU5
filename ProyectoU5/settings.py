@@ -57,10 +57,7 @@ DJANGO_APPS = [
 
 ]
 
-PROJECT_APPS = [
-    'users.apps.UsersConfig',
-    'payment.apps.PaymentConfig',
-]
+
 THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
@@ -71,7 +68,12 @@ THIRD_PARTY_APPS = [
     'django_filters',
     'django_celery_beat',
 ]
-INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
+PROJECT_APPS = [
+    'users.apps.UsersConfig',
+    'payment.apps.PaymentConfig',
+]
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS 
 
 
 MIDDLEWARE = [
