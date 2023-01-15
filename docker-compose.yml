@@ -41,9 +41,7 @@ services:
   celery:
     build: .
     restart: always
-    command: celery -A ProyectoU5 worker -l INFO
-    volumes:
-      - ./:app
+    command: celery -A ProyectoU5 worker -l INFO    
     environment:
       - DEBUG=1
       - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
@@ -54,8 +52,6 @@ services:
       - redis
   celery-beat:
     build: .
-    command: celery -A ProyectoU5 beat
-    volumes:
-      - ./:app
+    command: celery -A ProyectoU5 beat    
 volumes:
   postgres_data:
